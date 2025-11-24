@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zimu | المتجر الرسمي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- إعدادات الهوية البصرية الفاخرة --- */
+        :root {
+            --bg-dark: #050505;       /* أسود فاحم */
+            --card-bg: #121212;       /* رمادي داكن جداً */
+            --gold-main: #D4AF37;     /* ذهبي كلاسيكي */
+            --gold-light: #F2D06B;    /* ذهبي فاتح للإضاءة */
+            --text-white: #FFFFFF;
+            --text-gray: #B0B0B0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- الهيدر (الشعار) --- */
+        header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--gold-main), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        /* --- قسم المقدمة (Hero) --- */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            background: var(--gold-main);
+            filter: blur(120px);
+            opacity: 0.15; /* توهج ذهبي خلفي خافت */
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* --- شبكة المنتجات --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px 5%;
+            max-width: 1200px;
+            margin: 0 auto 80px auto;
+        }
+
+        /* --- كارت المنتج --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-main);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+        }
+
+        /* شريط "الأكثر مبيعاً" */
+        .badge {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: var(--gold-main);
+            color: #000;
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .product-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .product-desc {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            height: 40px; /* توحيد الطول */
+        }
+
+        .price {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            color: var(--gold-main);
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        /* --- زر الشراء (واتساب) --- */
+        .buy-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #b88a1d, #ffd700);
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .buy-btn:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Zimu</div>
+    </header>
+
+    <section class="hero">
+        <h1>مفتاحك لعالم <span style="color:var(--gold-main)">الاحتراف</span></h1>
+        <p>اشتراكات رسمية لأقوى أدوات الذكاء الاصطناعي والتصميم، بأسعار لا تقبل المنافسة.</p>
+    </section>
+
+    <section class="products-grid">
+        
+        <div class="card">
+            <div class="badge">الأكثر مبيعاً 🔥</div>
+            <h2 class="product-name">Canva Pro</h2>
+            <p class="product-desc">اشتراك رسمي على إيميلك الشخصي مع كافة المزايا.</p>
+            <span class="price">100 EGP</span>
+            <a href="https://wa.me/201000000000?text=مرحباً Zimu، أريد الاشتراك في Canva Pro" class="buy-btn" target="_blank">
+                اطلب الآن 🚀
+            </a>
+        </div>
+
+        <div class="card">
+            <h2 class="product-name">Gemini Pro</h2>
+            <p class="product-desc">امتلك عقل جوجل الخارق (Advanced) واستمتع بالذكاء.</p>
+            <span class="price">200 EGP</span>
+            <a href="https://wa.me/201000000000?text=مرحباً Zimu، أريد الاشتراك في Gemini Pro" class="buy-btn" target="_blank">
+                اطلب الآن 🚀
+            </a>
+        </div>
+
+        <div class="card">
+            <h2 class="product-name">Perplexity Pro</h2>
+            <p class="product-desc">محرك البحث الأذكى في العالم المدعوم بـ GPT-4.</p>
+            <span class="price">150 EGP</span>
+            <a href="https://wa.me/201000000000?text=مرحباً Zimu، أريد الاشتراك في Perplexity Pro" class="buy-btn" target="_blank">
+                اطلب الآن 🚀
+            </a>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>© 2024 Zimu Digital. جميع الحقوق محفوظة.</p>
+    </footer>
+
+</body>
+</html>
