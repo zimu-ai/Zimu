@@ -384,4 +384,278 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" class="modal-title"></h2>
+            <div id="modalBody" cla        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-primary); }
+        .product-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; min-height: 50px; }
+        .price { display: block; font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--gold-main); font-weight: bold; margin-bottom: 25px; }
+
+        .buttons-container { display: flex; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.3s; flex: 1; display: flex; align-items: center; justify-content: center; border: none; }
+        .btn-buy { background: linear-gradient(45deg, #b88a1d, #ffd700); color: #000; }
+        .btn-details { background: transparent; color: var(--gold-main); border: 1px solid var(--gold-main); }
+        .btn-details:hover { background: rgba(212, 175, 55, 0.1); }
+
+        /* --- قسم الآراء (العجلة الدوارة الرأسية) --- */
+        .reviews-section {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 450px; /* ارتفاع العجلة */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px; /* للعمق ثلاثي الأبعاد */
+            padding: 20px 0;
+        }
+
+        /* الظلال العلوية والسفلية لإخفاء الحواف */
+        .reviews-section::before, .reviews-section::after {
+            content: ''; position: absolute; left: 0; width: 100%; height: 100px; z-index: 20; pointer-events: none;
+        }
+        .reviews-section::before { top: 0; background: linear-gradient(to bottom, var(--bg-body), transparent); }
+        .reviews-section::after { bottom: 0; background: linear-gradient(to top, var(--bg-body), transparent); }
+
+        .wheel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .review-card-wheel {
+            position: absolute;
+            width: 80%;
+            max-width: 400px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            /* القيم الافتراضية للكروت المخفية */
+            opacity: 0;
+            z-index: 0;
+            transform: translateY(0) scale(0.8) rotateX(0deg);
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* الحالات المختلفة للكارت في العجلة */
+        .review-card-wheel.active {
+            opacity: 1; z-index: 10;
+            transform: translateY(0) scale(1) rotateX(0deg);
+            border-color: var(--gold-main);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .review-card-wheel.prev {
+            opacity: 0.5; z-index: 5;
+            transform: translateY(-130px) scale(0.85) rotateX(20deg); /* مائل للأعلى */
+            filter: blur(1px);
+        }
+        .review-card-wheel.next {
+            opacity: 0.5; z-index: 5;
+            transform: translateY(130px) scale(0.85) rotateX(-20deg); /* مائل للأسفل */
+            filter: blur(1px);
+        }
+        .review-card-wheel.hidden-up {
+            transform: translateY(-250px) scale(0.6); opacity: 0;
+        }
+        .review-card-wheel.hidden-down {
+            transform: translateY(250px) scale(0.6); opacity: 0;
+        }
+
+        .stars { color: var(--gold-main); font-size: 1.2rem; margin-bottom: 5px; }
+        .review-text { color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem; margin-bottom: 10px; }
+        .client-name { color: var(--gold-main); font-weight: bold; font-size: 0.9rem; }
+
+        /* أزرار التحكم الرأسية */
+        .wheel-controls {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 15px; z-index: 30;
+        }
+        .wheel-btn {
+            width: 45px; height: 45px;
+            background: var(--bg-card); border: 1px solid var(--gold-main);
+            border-radius: 50%; color: var(--gold-main);
+            font-size: 1.2rem; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .wheel-btn:hover { background: var(--gold-main); color: #000; transform: scale(1.1); }
+
+
+        /* --- الأسئلة الشائعة وتواصل --- */
+        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .faq-item { background: var(--bg-card); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+        .faq-question { width: 100%; padding: 20px; text-align: right; background: none; border: none; color: var(--text-primary); font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Cairo', sans-serif; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(0,0,0,0.2); color: var(--text-secondary); padding: 0 20px; }
+        .faq-item.active .faq-answer { max-height: 200px; padding: 15px 20px; }
+        .faq-icon { transition: 0.3s; color: var(--gold-main); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+
+        .contact-section { text-align: center; margin-top: 80px; padding: 50px 20px; background: linear-gradient(to top, rgba(0,0,0,0.2), transparent); }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border: 1px solid var(--gold-main); color: var(--gold-main); text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; margin-top: 20px; }
+        .contact-btn:hover { background: var(--gold-main); color: #000; }
+        
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem; background: var(--bg-body); margin-top: 20px; }
+
+        /* المودال */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+        .modal-content { background-color: var(--bg-card); border: 1px solid var(--gold-main); border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; text-align: right; position: relative; animation: modalOpen 0.4s ease; color: var(--text-primary); }
+        @keyframes modalOpen { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        .close-btn { position: absolute; top: 15px; left: 20px; color: var(--text-secondary); font-size: 28px; cursor: pointer; }
+        .modal-title { color: var(--gold-main); font-size: 1.5rem; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .modal-body p { color: var(--text-secondary); margin-bottom: 10px; }
+        .modal-features { list-style: none; }
+        .modal-features li { color: var(--text-primary); margin-bottom: 5px; }
+
+        .float-wa { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; }
+        .float-wa:hover { transform: scale(1.1); box-shadow: 0 0 15px #25d366; }
+        .float-wa svg { width: 35px; height: 35px; fill: white; }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 10px; padding: 15px; }
+            .nav-links { gap: 15px; font-size: 0.9rem; width: 100%; justify-content: center; }
+            .theme-switcher { position: absolute; top: 15px; left: 15px; }
+            .reviews-section { max-width: 100%; height: 400px; }
+            .wheel-controls { right: 10px; }
+            .review-card-wheel { width: 75%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- النافبار -->
+    <nav class="navbar">
+        <div class="theme-switcher">
+            <div class="theme-btn t-dark active" onclick="setTheme('dark')"></div>
+            <div class="theme-btn t-light" onclick="setTheme('light')"></div>
+            <div class="theme-btn t-blue" onclick="setTheme('blue')"></div>
+        </div>
+        <a href="#" class="nav-logo">Zimu</a>
+        <ul class="nav-links">
+            <li><a href="#hero">الرئيسية</a></li>
+            <li><a href="#products">المنتجات</a></li>
+            <li><a href="#reviews">الآراء</a></li>
+            <li><a href="#faq">الأسئلة</a></li>
+        </ul>
+    </nav>
+
+    <!-- الهيرو -->
+    <section id="hero" class="hero reveal">
+        <h1>مفتاحك لعالم <span style="color:var(--gold-main)">الاحتراف</span></h1>
+        <p>اشتراكات رسمية لأقوى أدوات الذكاء الاصطناعي والتصميم، بأسعار لا تقبل المنافسة.</p>
+    </section>
+
+    <!-- المنتجات -->
+    <h2 class="section-title reveal" id="products">باقاتنا المميزة</h2>
+    <section class="products-grid reveal">
+        <!-- كاردات المنتجات (نفس السابق) -->
+        <div class="card">
+            <div class="badge">الأكثر مبيعاً 🔥</div>
+            <h2 class="product-name">Canva Pro</h2>
+            <p class="product-desc">اشتراك رسمي على إيميلك الشخصي مع كافة المزايا.</p>
+            <span class="price">100 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('canva')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20كانفا%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="product-name">Gemini Pro</h2>
+            <p class="product-desc">استمتع بـ Nano Banana , Gemini 3 الأحدث من جوجل.</p>
+            <span class="price">200 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('gemini')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20جيمناي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="product-name">Perplexity Pro</h2>
+            <p class="product-desc">محرك البحث الذكي الذي يدعم GPT-5.1 , Grok 4.</p>
+            <span class="price">150 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('perplexity')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20بيربليكستي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- آراء العملاء (العجلة الدوارة الرأسية) -->
+    <h2 class="section-title reveal" id="reviews">ماذا يقول عملاؤنا؟</h2>
+    <div class="reviews-section reveal">
+        
+        <!-- أزرار التحكم -->
+        <div class="wheel-controls">
+            <div class="wheel-btn" onclick="rotateWheel('up')">▲</div>
+            <div class="wheel-btn" onclick="rotateWheel('down')">▼</div>
+        </div>
+
+        <div class="wheel-container" id="wheelContainer">
+            <!-- الكروت ستتم إدارتها عبر JS لكن نضعها هنا للهيكلة -->
+            <div class="review-card-wheel" data-index="0">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"سرعة خيالية في التسليم، الحساب شغال تمام بقاله شهرين بدون أي مشاكل. شكراً زيمو."</p>
+                <span class="client-name">- أحمد محمد</span>
+            </div>
+            <div class="review-card-wheel" data-index="1">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"أحسن سعر لقيته لاشتراك جيمناي، والدعم الفني محترم جداً بيرد في ثواني."</p>
+                <span class="client-name">- سارة علي</span>
+            </div>
+            <div class="review-card-wheel" data-index="2">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"كنت خايف في الأول بس التجربة أثبتت المصداقية. منصة محترمة وأنصح بيها."</p>
+                <span class="client-name">- محمود حسن</span>
+            </div>
+            <div class="review-card-wheel" data-index="3">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"التعامل قمة في الرقي والاحترام، والخدمة ممتازة جداً."</p>
+                <span class="client-name">- عمر خالد</span>
+            </div>
+            <div class="review-card-wheel" data-index="4">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"التوفير مع زيمو حقيقي، شكرا ليكم."</p>
+                <span class="client-name">- مريم يوسف</span>
+            </div>
+            <div class="review-card-wheel" data-index="5">
+                <div class="stars">★★★★★</div>
+                <p class="review-text">"خدمة ما بعد البيع ممتازة، وده اللي بيخليني أتعامل معاكم دايماً."</p>
+                <span class="client-name">- يوسف كمال</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- الأسئلة الشائعة -->
+    <h2 class="section-title reveal" id="faq">الأسئلة الشائعة</h2>
+    <section class="faq-container reveal">
+        <div class="faq-item">
+            <button class="faq-question">كيف أضمن حقي؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نحن نضمن لك تفعيل الحساب فوراً قبل الدفع في بعض الحالات.</p></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">هل الاشتراك رسمي؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نعم، جميع الاشتراكات رسمية (Premium).</p></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">ما هي طرق الدفع؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نقبل الدفع عبر فودافون كاش وإنستاباى.</p></div>
+        </div>
+    </section>
+
+    <!-- التواصل -->
+    <section class="contact-section reveal">
+        <h2 style="color:var(--text-primary);">لديك استفسار آخر؟</h2>
+        <a href="https://wa.me/201022625243" target="_blank" class="contact-btn">تواصل معنا عبر واتساب</a>
+    </section>
+
+    <footer><p>© 2025 Zimu Digital. جميع الحقوق محفوظة.</p></footer>
+
+    <!-- المودال -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" class="modal-title"></h2>
             <div id="modalBody" cla
