@@ -384,222 +384,4 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle" class="modal-title"></h2>
-            <div id="modalBody" cla        .stars { color: var(--gold-main); margin-bottom: 10px; }
-        .review-text { font-size: 0.95rem; color: #ddd; line-height: 1.6; margin-bottom: 15px; }
-        .client-name { font-weight: bold; color: var(--gold-main); font-size: 0.9rem; }
-
-        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-        .faq-item { background: #0f0f0f; border-bottom: 1px solid #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
-        .faq-question { width: 100%; padding: 20px; text-align: right; background: none; border: none; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Cairo', sans-serif; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: #111; color: #aaa; padding: 0 20px; }
-        .faq-item.active .faq-answer { max-height: 200px; padding-bottom: 15px; padding-top: 15px; }
-
-        .contact-section { text-align: center; margin-top: 80px; padding: 50px 20px; background: linear-gradient(to top, #0a0a0a, transparent); }
-        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border: 1px solid var(--gold-main); color: var(--gold-main); text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; margin-top: 20px; }
-        .contact-btn:hover { background: var(--gold-main); color: #000; }
-        
-        footer { text-align: center; padding: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: #555; font-size: 0.9rem; margin-top: 20px; }
-
-        .float-wa { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; }
-        .float-wa:hover { transform: scale(1.1); box-shadow: 0 0 15px #25d366; }
-        .float-wa svg { width: 35px; height: 35px; fill: white; }
-
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">Zimu</div>
-        <div class="header-line"></div>
-    </header>
-
-    <section class="hero reveal">
-        <h1>مفتاحك لعالم <span style="color:var(--gold-main)">الاحتراف</span></h1>
-        <p>اشتراكات رسمية لأقوى أدوات الذكاء الاصطناعي والتصميم، بأسعار لا تقبل المنافسة.</p>
-    </section>
-
-    <section class="products-grid reveal">
-        <div class="card">
-            <div class="badge">الأكثر مبيعاً 🔥</div>
-            <h2 class="product-name">Canva Pro</h2>
-            <p class="product-desc">اشتراك رسمي على إيميلك الشخصي مع كافة المزايا.</p>
-            <span class="price">100 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('canva')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20كانفا%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="product-name">Gemini Pro</h2>
-            <p class="product-desc">استمتع بـ Nano Banana , Gemini 3</p>
-            <span class="price">200 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('gemini')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20جيمناي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2 class="product-name">Perplexity Pro</h2>
-            <p class="product-desc">محرك البحث الذكي الذي يدعم GPT-5.1 , Grok 4</p>
-            <span class="price">150 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('perplexity')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20بيربليكستي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
-            </div>
-        </div>
-    </section>
-
-    <h2 class="section-title reveal">ماذا يقول عملاؤنا؟</h2>
-    <section class="reviews-grid reveal">
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"سرعة خيالية في التسليم، الحساب شغال تمام بقاله شهرين بدون أي مشاكل. شكراً زيمو."</p>
-            <span class="client-name">- أحمد محمد</span>
-        </div>
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"أحسن سعر لقيته لاشتراك جيمناي، والدعم الفني محترم جداً بيرد في ثواني."</p>
-            <span class="client-name">- سارة علي</span>
-        </div>
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"كنت خايف في الأول بس التجربة أثبتت المصداقية. منصة محترمة وأنصح بيها."</p>
-            <span class="client-name">- محمود حسن</span>
-        </div>
-    </section>
-
-    <h2 class="section-title reveal">الأسئلة الشائعة</h2>
-    <section class="faq-container reveal">
-        <div class="faq-item">
-            <button class="faq-question">كيف أضمن حقي؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نحن نضمن لك تفعيل الحساب فوراً قبل الدفع في بعض الحالات، ولدينا مئات العملاء الراضين.</p></div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question">هل الاشتراك رسمي؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نعم، جميع الاشتراكات رسمية (Premium) وتتم دعوتك عبر بريدك الإلكتروني الشخصي.</p></div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question">ما هي طرق الدفع؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نقبل الدفع عبر فودافون كاش، إنستاباى (InstaPay)، والمحافظ الإلكترونية.</p></div>
-        </div>
-    </section>
-
-    <section class="contact-section reveal">
-        <h2 style="color:white; margin-bottom:10px;">لديك استفسار آخر؟</h2>
-        <p style="color:#888;">فريق الدعم جاهز للرد عليك طوال اليوم</p>
-        <a href="https://wa.me/201022625243" target="_blank" class="contact-btn">
-            تواصل معنا عبر واتساب
-        </a>
-    </section>
-
-    <footer>
-        <p>© 2025 Zimu Digital. جميع الحقوق محفوظة.</p>
-    </footer>
-
-    <div id="productModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle" class="modal-title"></h2>
-            <div id="modalBody" class="modal-body"></div>
-        </div>
-    </div>
-
-    <a href="https://wa.me/201022625243" class="float-wa" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
-    </a>
-
-    <script>
-        // داتا التفاصيل لكل منتج
-        const productsData = {
-            canva: {
-                title: "تفاصيل Canva Pro",
-                content: `
-                    <p>احصل على القوة الكاملة للتصميم مع النسخة الاحترافية.</p>
-                    <ul class="modal-features">
-                        <li>وصول لـ 100 مليون صورة وفيديو وعنصر بريميوم.</li>
-                        <li>إزالة الخلفية بضغطة زر (Background Remover).</li>
-                        <li>تغيير مقاسات التصميم سحرياً (Magic Resize).</li>
-                        <li>إضافة الخطوط الخاصة بك والبراند كيت.</li>
-                        <li>تفعيل رسمي على إيميلك الشخصي.</li>
-                    </ul>
-                `
-            },
-            gemini: {
-                title: "تفاصيل Gemini Pro",
-                content: `
-                    <p>أذكى نموذج ذكاء اصطناعي من Google، الآن بين يديك.</p>
-                    <ul class="modal-features">
-                        <li>يدعم Nano Banana و Gemini 3 الأحدث.</li>
-                        <li>نافذة سياق ضخمة (Context Window) لتحليل الملفات الكبيرة.</li>
-                        <li>قدرات برمجية فائقة وتحليل الصور والفيديو.</li>
-                        <li>تكامل كامل مع خدمات جوجل (Docs, Drive).</li>
-                    </ul>
-                `
-            },
-            perplexity: {
-                title: "تفاصيل Perplexity Pro",
-                content: `
-                    <p>ابحث بذكاء واحصل على إجابات دقيقة وموثقة بالمصادر.</p>
-                    <ul class="modal-features">
-                        <li>يدعم أحدث الموديلات: GPT-5.1 و Grok 4.</li>
-                        <li>بحث مباشر في الوقت الفعلي (Real-time Search).</li>
-                        <li>رفع ملفات وتحليلها بدقة.</li>
-                        <li>تجربة خالية من الإعلانات تماماً.</li>
-                    </ul>
-                `
-            }
-        };
-
-        // فتح المودال
-        function openModal(productId) {
-            const modal = document.getElementById('productModal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
-            
-            title.innerText = productsData[productId].title;
-            body.innerHTML = productsData[productId].content;
-            
-            modal.style.display = "flex";
-        }
-
-        // غلق المودال
-        function closeModal() {
-            document.getElementById('productModal').style.display = "none";
-        }
-
-        // غلق المودال عند الضغط في الخارج
-        window.onclick = function(event) {
-            const modal = document.getElementById('productModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // أنيميشن السكرول
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 150;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
-
-        // الأسئلة الشائعة
-        var acc = document.getElementsByClassName("faq-question");
-        for (var i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
-                this.parentElement.classList.toggle("active");
-            });
-        }
-    </script>
-
-</body>
-                    </html>
+            <div id="modalBody" cla
