@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,109 +8,375 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- تعريف المتغيرات والألوان (Themes) --- */
+        /* --- الأساسيات والمتغيرات --- */
         :root {
-            --gold-main: #D4AF37;
-            --gold-light: #F2D06B;
-            --transition-speed: 0.5s;
-        }
-
-        /* 1. الوضع الداكن (الافتراضي) */
-        [data-theme="dark"] {
+            /* الوضع الداكن (الافتراضي) */
             --bg-body: #050505;
             --bg-card: #121212;
-            --bg-nav: rgba(5, 5, 5, 0.9);
-            --text-primary: #FFFFFF;
-            --text-secondary: #B0B0B0;
+            --text-main: #FFFFFF;
+            --text-sec: #B0B0B0;
+            --gold-main: #D4AF37;
+            --gold-light: #F2D06B;
+            --nav-bg: rgba(5, 5, 5, 0.9);
             --border-color: rgba(255, 255, 255, 0.05);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --wheel-bg: #0f0f0f;
+            --shadow-color: rgba(0,0,0,0.5);
         }
 
-        /* 2. الوضع المضيء */
-        [data-theme="light"] {
+        /* الوضع الفاتح */
+        body.light-mode {
             --bg-body: #F9F9F9;
             --bg-card: #FFFFFF;
-            --bg-nav: rgba(249, 249, 249, 0.9);
-            --text-primary: #1A1A1A;
-            --text-secondary: #555555;
+            --text-main: #222222;
+            --text-sec: #555555;
+            --nav-bg: rgba(249, 249, 249, 0.95);
             --border-color: rgba(0, 0, 0, 0.08);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --wheel-bg: #f0f0f0;
+            --shadow-color: rgba(0,0,0,0.1);
         }
 
-        /* 3. الوضع الأزرق الليلي */
-        [data-theme="blue"] {
-            --bg-body: #001220;
-            --bg-card: #001f3f;
-            --bg-nav: rgba(0, 18, 32, 0.9);
-            --text-primary: #E0F7FA;
-            --text-secondary: #8AAAC0;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.4);
-            --wheel-bg: #001829;
+        /* الوضع الأزرق الليلي */
+        body.blue-mode {
+            --bg-body: #0a192f;
+            --bg-card: #112240;
+            --text-main: #e6f1ff;
+            --text-sec: #8892b0;
+            --nav-bg: rgba(10, 25, 47, 0.95);
+            --border-color: rgba(230, 241, 255, 0.1);
+            --shadow-color: rgba(0,0,0,0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         
-        html { scroll-behavior: smooth; }
-
         body {
             background-color: var(--bg-body);
-            color: var(--text-primary);
+            color: var(--text-main);
             font-family: 'Cairo', sans-serif;
             overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            padding-top: 80px;
+            padding-bottom: 60px;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* --- النافبار --- */
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: var(--bg-nav);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--gold-main);
-            padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+        /* --- مبدل الثيمات --- */
+        .theme-switcher {
+            position: fixed;
+            top: 25px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1100;
         }
-        .nav-logo {
-            font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900;
-            background: linear-gradient(to right, var(--gold-main), var(--gold-light));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-decoration: none;
+        .theme-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a { color: var(--text-primary); text-decoration: none; font-weight: 700; font-size: 1rem; transition: 0.3s; position: relative; }
-        .nav-links a:hover { color: var(--gold-main); }
-        
-        .theme-switcher { display: flex; gap: 8px; }
-        .theme-btn { width: 25px; height: 25px; border-radius: 50%; border: 2px solid var(--border-color); cursor: pointer; transition: 0.3s; }
-        .theme-btn.active { border-color: var(--gold-main); transform: scale(1.2); }
+        .theme-btn:hover { transform: scale(1.1); border-color: var(--gold-main); }
         .t-dark { background: #000; }
         .t-light { background: #fff; }
-        .t-blue { background: #001f3f; }
+        .t-blue { background: #0a192f; }
 
-        /* --- الهيرو والمنتجات --- */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        .hero { text-align: center; padding: 60px 20px; }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 15px; font-weight: 700; color: var(--text-primary); }
-        .hero p { color: var(--text-secondary); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
-
-        .section-title { text-align: center; font-size: 1.8rem; color: var(--gold-main); margin: 60px 0 30px 0; display: block; }
+        /* --- الهيدر والناف بار --- */
+        header { padding-top: 20px; text-align: center; }
         
+        /* الناف بار الجديد */
+        .navbar {
+            position: sticky; top: 0; z-index: 1000;
+            background: var(--nav-bg); backdrop-filter: blur(10px);
+            padding: 15px 0; border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .nav-list {
+            list-style: none; display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 0 20px;
+        }
+        .nav-link {
+            color: var(--text-main); text-decoration: none; font-weight: bold; font-size: 1.1rem;
+            transition: 0.3s; position: relative;
+        }
+        .nav-link:hover { color: var(--gold-main); }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; right: 0;
+            background: var(--gold-main); transition: 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* الشعار */
+        .logo {
+            font-family: 'Montserrat', sans-serif; font-size: 2.8rem; font-weight: 900;
+            background: linear-gradient(to right, var(--gold-main), var(--gold-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px; margin-bottom: 10px; display: inline-block;
+        }
+
+        /* --- الهيرو --- */
+        .hero { text-align: center; padding: 50px 20px; position: relative; }
+        .hero h1 { font-size: 2rem; margin-bottom: 10px; font-weight: 700; color: var(--text-main); }
+        .hero p { color: var(--text-sec); font-size: 1.1rem; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+        /* --- المنتجات --- */
+        .section-title { text-align: center; font-size: 1.8rem; color: var(--gold-main); margin: 60px 0 30px 0; display: inline-block; width: 100%; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1200px; margin: 0 auto; }
+        
         .card {
             background: var(--bg-card); border: 1px solid var(--border-color);
             border-radius: 15px; padding: 30px; text-align: center; transition: 0.3s; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; justify-content: space-between;
             box-shadow: 0 5px 15px var(--shadow-color);
+            display: flex; flex-direction: column; justify-content: space-between;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--gold-main); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15); }
+        .card:hover { transform: translateY(-10px); border-color: var(--gold-main); }
         .badge { position: absolute; top: 15px; right: 15px; background: var(--gold-main); color: #000; padding: 5px 12px; font-size: 0.8rem; border-radius: 20px; font-weight: bold; }
-        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-primary); }
+        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); }
+        .product-desc { color: var(--text-sec); font-size: 0.9rem; margin-bottom: 20px; min-height: 50px; }
+        .price { display: block; font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--gold-main); font-weight: bold; margin-bottom: 25px; }
+
+        /* الأزرار */
+        .buttons-container { display: flex; gap: 10px; justify-content: center; }
+        .btn { padding: 12px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.95rem; cursor: pointer; transition: 0.3s; flex: 1; display: flex; align-items: center; justify-content: center; border: none; }
+        .btn-buy { background: linear-gradient(45deg, #b88a1d, #ffd700); color: #000; }
+        .btn-buy:hover { filter: brightness(1.1); }
+        .btn-details { background: transparent; color: var(--gold-main); border: 1px solid var(--gold-main); }
+        .btn-details:hover { background: rgba(212, 175, 55, 0.1); }
+
+        /* --- سلايدر الآراء (أفقي) --- */
+        .reviews-wrapper {
+            position: relative; max-width: 800px; margin: 0 auto; padding: 0 20px; overflow: hidden;
+        }
+        .reviews-container {
+            overflow: hidden; padding: 20px 5px; width: 100%;
+        }
+        .reviews-track {
+            display: flex; transition: transform 0.5s ease-in-out; width: 100%;
+        }
+        .review-card {
+            min-width: 100%; /* الكارد يأخذ عرض الكونتينر بالكامل */
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 10px; padding: 30px; text-align: center;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .nav-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--bg-card); border: 1px solid var(--gold-main); color: var(--gold-main);
+            width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem;
+            cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s; user-select: none;
+        }
+        .nav-arrow:hover { background: var(--gold-main); color: #000; }
+        .prev-btn { right: 10px; }
+        .next-btn { left: 10px; }
+        
+        .stars { color: var(--gold-main); margin-bottom: 10px; font-size: 1.2rem; }
+        .review-text { font-size: 1.1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 15px; font-style: italic; max-width: 600px; }
+        .client-name { font-weight: bold; color: var(--gold-main); font-size: 0.9rem; }
+
+        /* --- الأسئلة الشائعة --- */
+        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .faq-item { background: var(--bg-card); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+        .faq-question { width: 100%; padding: 20px; text-align: right; background: none; border: none; color: var(--text-main); font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Cairo', sans-serif; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(0,0,0,0.1); color: var(--text-sec); padding: 0 20px; }
+        .faq-item.active .faq-answer { max-height: 200px; padding: 15px 20px; }
+        .faq-icon { transition: 0.3s; color: var(--gold-main); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); }
+
+
+        /* --- تواصل وفوتر --- */
+        .contact-section { text-align: center; margin-top: 80px; padding: 50px 20px; background: linear-gradient(to top, rgba(0,0,0,0.1), transparent); }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border: 1px solid var(--gold-main); color: var(--gold-main); text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; margin-top: 20px; }
+        .contact-btn:hover { background: var(--gold-main); color: #000; }
+        
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-sec); font-size: 0.9rem; margin-top: 20px; }
+
+        /* --- المودال --- */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--bg-card); border: 1px solid var(--gold-main); border-radius: 15px;
+            padding: 30px; width: 90%; max-width: 500px; text-align: right; position: relative; color: var(--text-main);
+            animation: modalOpen 0.4s ease;
+        }
+        @keyframes modalOpen { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        .close-btn { position: absolute; top: 15px; left: 20px; color: var(--text-sec); font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--gold-main); }
+        .modal-title { color: var(--gold-main); font-size: 1.5rem; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .modal-features { list-style: none; margin-top: 10px; }
+        .modal-features li { margin-bottom: 8px; color: var(--text-main); position: relative; padding-right: 20px; }
+        .modal-features li::before { content: '✔'; color: var(--gold-main); position: absolute; right: 0; }
+
+        /* الأنيميشن */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .float-wa { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; }
+        .float-wa:hover { transform: scale(1.1); box-shadow: 0 0 15px #25d366; }
+        .float-wa svg { width: 35px; height: 35px; fill: white; }
+
+        @media (max-width: 768px) {
+            .nav-list { gap: 15px; font-size: 0.9rem; }
+            .theme-switcher { top: 15px; left: 15px; }
+            .navbar { padding: 10px 0; }
+        }
+    </style>
+</head>
+<body class="">
+
+    <!-- مبدل الثيمات -->
+    <div class="theme-switcher">
+        <div class="theme-btn t-dark" onclick="setTheme('dark')" title="داكن"></div>
+        <div class="theme-btn t-light" onclick="setTheme('light')" title="فاتح"></div>
+        <div class="theme-btn t-blue" onclick="setTheme('blue')" title="أزرق ليلي"></div>
+    </div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="logo">Zimu</div>
+        
+        <nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="#hero" class="nav-link">الرئيسية</a></li>
+                <li><a href="#products" class="nav-link">المنتجات</a></li>
+                <li><a href="#reviews" class="nav-link">آراء العملاء</a></li>
+                <li><a href="#faq" class="nav-link">الأسئلة</a></li>
+                <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- الهيرو -->
+    <section id="hero" class="hero reveal">
+        <h1>مفتاحك لعالم <span style="color:var(--gold-main)">الاحتراف</span></h1>
+        <p>اشتراكات رسمية لأقوى أدوات الذكاء الاصطناعي والتصميم، بأسعار لا تقبل المنافسة.</p>
+    </section>
+
+    <!-- المنتجات -->
+    <h2 class="section-title reveal" id="products">المنتجات</h2>
+    <section class="products-grid reveal">
+        <!-- Canva -->
+        <div class="card">
+            <div class="badge">الأكثر مبيعاً 🔥</div>
+            <h2 class="product-name">Canva Pro</h2>
+            <p class="product-desc">اشتراك رسمي على إيميلك الشخصي مع كافة المزايا.</p>
+            <span class="price">100 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('canva')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20كانفا%20برو" class="btn btn-buy" target="_blank">شراء</a>
+            </div>
+        </div>
+
+        <!-- Gemini -->
+        <div class="card">
+            <h2 class="product-name">Gemini Pro</h2>
+            <p class="product-desc">استمتع بـ Nano Banana , Gemini 3</p>
+            <span class="price">200 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('gemini')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20جيمناي%20برو" class="btn btn-buy" target="_blank">شراء</a>
+            </div>
+        </div>
+
+        <!-- Perplexity -->
+        <div class="card">
+            <h2 class="product-name">Perplexity Pro</h2>
+            <p class="product-desc">محرك البحث الذكي الذي يدعم GPT-5.1 , Grok 4</p>
+            <span class="price">150 EGP</span>
+            <div class="buttons-container">
+                <button class="btn btn-details" onclick="openModal('perplexity')">تفاصيل</button>
+                <a href="https://wa.me/201022625243?text=اشتراك%20بيربليكستي%20برو" class="btn btn-buy" target="_blank">شراء</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- آراء العملاء -->
+    <h2 class="section-title reveal" id="reviews">آراء العملاء</h2>
+    <div class="reviews-wrapper reveal">
+        <div class="nav-arrow prev-btn" onclick="moveSlide(1)">&#10095;</div>
+        
+        <div class="reviews-container">
+            <div class="reviews-track" id="track">
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"سرعة خيالية في التسليم، الحساب شغال تمام بقاله شهرين بدون أي مشاكل. شكراً زيمو."</p>
+                    <span class="client-name">- أحمد محمد</span>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"أحسن سعر لقيته لاشتراك جيمناي، والدعم الفني محترم جداً بيرد في ثواني."</p>
+                    <span class="client-name">- سارة علي</span>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"كنت خايف في الأول بس التجربة أثبتت المصداقية. منصة محترمة وأنصح بيها."</p>
+                    <span class="client-name">- محمود حسن</span>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"خدمة ما بعد البيع ممتازة، حصلت مشكلة وحلوها فوراً."</p>
+                    <span class="client-name">- يوسف كمال</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-arrow next-btn" onclick="moveSlide(-1)">&#10094;</div>
+    </div>
+
+    <!-- الأسئلة الشائعة -->
+    <h2 class="section-title reveal" id="faq">الأسئلة الشائعة</h2>
+    <section class="faq-container reveal">
+        <div class="faq-item">
+            <button class="faq-question">كيف أضمن حقي؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نحن نضمن لك تفعيل الحساب فوراً قبل الدفع في بعض الحالات، ولدينا مئات العملاء الراضين.</p></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">هل الاشتراك رسمي؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نعم، جميع الاشتراكات رسمية (Premium) وتتم دعوتك عبر بريدك الإلكتروني الشخصي.</p></div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">ما هي طرق الدفع؟ <span class="faq-icon">▼</span></button>
+            <div class="faq-answer"><p>نقبل الدفع عبر فودافون كاش، إنستاباى (InstaPay)، والمحافظ الإلكترونية.</p></div>
+        </div>
+    </section>
+
+    <!-- التواصل -->
+    <section id="contact" class="contact-section reveal">
+        <h2 style="color:var(--text-main); margin-bottom:10px;">لديك استفسار آخر؟</h2>
+        <p style="color:var(--text-sec);">فريق الدعم جاهز للرد عليك طوال اليوم</p>
+        <a href="https://wa.me/201022625243" target="_blank" class="contact-btn">
+            تواصل معنا عبر واتساب
+        </a>
+    </section>
+
+    <footer>
+        <p>© 2025 Zimu Digital. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- المودال -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" class="modal-title"></h2>
+            <div id="modalBody" class="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- واتساب العائم -->
+    <a href="https://wa.me/201022625243" class="float-wa" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+    </a>
+
+    <script>
+        // --- 1. التحكم في الثيمات ---
+        function setTheme(mode) {
+            document.body.className = ''; // حذف الكلاسات القديمة
+            if (mode === 'light') document.body.classList.add('light-mode');
+            if (mode === 'blue') document.body.classList.add('blue-mode');
+            // الوضع الافتراضي (الداكن) يعمل عند عدم وجود كلاس
+        }
+
+        // --- 2. التحكم في سلايدر الآراء ---
+        let currentIndex = 0;
+        const track = document.getElementById('track');
+        const cards = document.querySelectorAll('.review-card');
+        const tot        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-primary); }
         .product-desc { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px; min-height: 50px; }
         .price { display: block; font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--gold-main); font-weight: bold; margin-bottom: 25px; }
 
