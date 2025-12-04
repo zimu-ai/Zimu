@@ -8,238 +8,348 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- الأساسيات --- */
+        /* --- متغيرات الألوان (Theme Variables) --- */
         :root {
-            --bg-dark: #050505;
-            --card-bg: #121212;
-            --gold-main: #D4AF37;
-            --gold-light: #F2D06B;
-            --text-white: #FFFFFF;
-            --text-gray: #B0B0B0;
+            /* الوضع الافتراضي (Dark) */
+            --bg-main: #050505;
+            --bg-card: #121212;
+            --bg-nav: rgba(5, 5, 5, 0.85);
+            --text-main: #FFFFFF;
+            --text-sec: #B0B0B0;
+            --accent: #D4AF37; /* ذهبي */
+            --border-color: rgba(255, 255, 255, 0.05);
+            --shadow: rgba(212, 175, 55, 0.1);
         }
 
+        /* الوضع النهاري (Light Mode) */
+        body.light-mode {
+            --bg-main: #F4F4F4;
+            --bg-card: #FFFFFF;
+            --bg-nav: rgba(244, 244, 244, 0.85);
+            --text-main: #111111;
+            --text-sec: #555555;
+            --accent: #D4AF37; /* يظل الذهبي للبراند */
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        /* الوضع الكحلي (Navy Mode) */
+        body.navy-mode {
+            --bg-main: #0a192f;
+            --bg-card: #112240;
+            --bg-nav: rgba(10, 25, 47, 0.85);
+            --text-main: #e6f1ff;
+            --text-sec: #8892b0;
+            --accent: #64ffda; /* تركواز نيون */
+            --border-color: rgba(100, 255, 218, 0.1);
+            --shadow: rgba(100, 255, 218, 0.1);
+        }
+
+        /* --- إعدادات عامة --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; } /* عشان الناف بار مايغطيش العنوان */
         
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-white);
+            background-color: var(--bg-main);
+            color: var(--text-main);
             font-family: 'Cairo', sans-serif;
             overflow-x: hidden;
-            /* منع السكرول أثناء التحميل */
-            overflow-y: hidden; 
+            overflow-y: hidden; /* للـ preloader */
+            transition: background 0.5s ease, color 0.5s ease;
             padding-bottom: 60px;
         }
-
-        /* تمكين السكرول بعد التحميل */
         body.loaded { overflow-y: auto; }
 
-        /* --- شاشة التحميل (Preloader) --- */
+        /* --- شاشة التحميل --- */
         #preloader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-dark);
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-main); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            transition: opacity 0.8s, visibility 0.8s;
         }
-
         .loader-logo {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 4rem;
-            font-weight: 900;
-            background: linear-gradient(to right, var(--gold-main), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 3px;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        .fade-out {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* --- الأنيميشن --- */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* --- الهيدر --- */
-        header { padding-top: 20px; text-align: center; }
-        .logo {
-            font-family: 'Montserrat', sans-serif; font-size: 2.8rem; font-weight: 900;
-            background: linear-gradient(to right, var(--gold-main), var(--gold-light));
+            font-family: 'Montserrat', sans-serif; font-size: 4rem; font-weight: 900;
+            background: linear-gradient(to right, var(--accent), #fff);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 2px; margin-bottom: 15px; display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+        .fade-out { opacity: 0; visibility: hidden; }
+
+        /* --- الناف بار (Sticky Navbar) --- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: var(--bg-nav); backdrop-filter: blur(10px);
+            padding: 15px 5%; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nav-logo { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--accent); }
+        .nav-links { display: flex; gap: 20px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: bold; font-size: 0.95rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        /* إخفاء القائمة في الموبايل وتبسيطها */
+        @media (max-width: 600px) {
+            .nav-links { display: none; } /* يمكن إضافة زر همبرغر لاحقاً */
+            .navbar { justify-content: center; }
+        }
+
+        /* --- الهيدر والهيرو --- */
+        header { padding-top: 100px; text-align: center; }
+        .logo-big {
+            font-family: 'Montserrat', sans-serif; font-size: 3rem; font-weight: 900;
+            background: linear-gradient(to right, var(--accent), #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block; margin-bottom: 10px;
         }
         .header-line {
-            width: 100%; height: 8px; background: linear-gradient(90deg, var(--gold-main), transparent);
-            clip-path: polygon(0 0, 100% 45%, 100% 55%, 0 100%); margin-top: 5px; opacity: 0.8;
+            width: 100%; height: 6px; background: linear-gradient(90deg, var(--accent), transparent);
+            clip-path: polygon(0 0, 100% 45%, 100% 55%, 0 100%); opacity: 0.8;
         }
-
-        /* --- الهيرو --- */
-        .hero { text-align: center; padding: 50px 20px; position: relative; }
-        .hero h1 { font-size: 2rem; margin-bottom: 10px; font-weight: 700; }
-        .hero p { color: var(--text-gray); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+        .hero { text-align: center; padding: 40px 20px; }
+        .hero h1 { font-size: 2rem; margin-bottom: 10px; }
+        .hero p { color: var(--text-sec); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
 
         /* --- المنتجات --- */
-        .section-title { text-align: center; font-size: 1.8rem; color: var(--gold-main); margin: 60px 0 30px 0; display: inline-block; width: 100%; }
+        .section-title { text-align: center; font-size: 1.8rem; color: var(--accent); margin: 60px 0 30px 0; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 5%; max-width: 1200px; margin: 0 auto; }
-        
         .card {
-            background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 15px; padding: 30px; text-align: center; transition: 0.3s; position: relative; overflow: hidden;
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 15px; padding: 30px; text-align: center; transition: 0.3s; position: relative;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--gold-main); box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1); }
-        .badge { position: absolute; top: 15px; right: 15px; background: var(--gold-main); color: #000; padding: 5px 12px; font-size: 0.8rem; border-radius: 20px; font-weight: bold; }
-        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: white; }
-        .product-desc { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 20px; height: 40px; }
-        .price { display: block; font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--gold-main); font-weight: bold; margin-bottom: 25px; }
-
-        /* --- الأزرار الجديدة --- */
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 40px var(--shadow); }
+        .badge { position: absolute; top: 15px; right: 15px; background: var(--accent); color: #000; padding: 5px 12px; font-size: 0.8rem; border-radius: 20px; font-weight: bold; }
+        .product-name { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 10px; color: var(--text-main); }
+        .product-desc { color: var(--text-sec); font-size: 0.9rem; margin-bottom: 20px; height: 40px; }
+        .price { display: block; font-family: 'Montserrat', sans-serif; font-size: 2.2rem; color: var(--accent); font-weight: bold; margin-bottom: 25px; }
+        
         .buttons-container { display: flex; gap: 10px; justify-content: center; }
-        .btn { padding: 12px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.95rem; cursor: pointer; transition: 0.3s; flex: 1; }
-        .btn-buy { background: linear-gradient(45deg, #b88a1d, #ffd700); color: #000; border: none; }
-        .btn-buy:hover { filter: brightness(1.1); }
-        .btn-details { background: transparent; color: var(--gold-main); border: 1px solid var(--gold-main); }
+        .btn { padding: 12px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 0.9rem; cursor: pointer; transition: 0.3s; flex: 1; }
+        .btn-buy { background: var(--accent); color: #000; border: none; }
+        .btn-details { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
         .btn-details:hover { background: rgba(212, 175, 55, 0.1); }
+
+        /* --- سلايدر الآراء (Carousel) --- */
+        .slider-wrapper {
+            position: relative; max-width: 900px; margin: 0 auto; padding: 0 40px; /* مساحة للأسهم */
+        }
+        .slider-container {
+            overflow: hidden; scroll-behavior: smooth;
+        }
+        .slider-track {
+            display: flex; gap: 20px; transition: transform 0.5s ease-in-out;
+        }
+        .review-card {
+            min-width: 100%; /* كارت واحد في الموبايل */
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 10px; padding: 30px; text-align: center;
+        }
+        @media (min-width: 768px) {
+            .review-card { min-width: 48%; } /* كارتين في التابلت */
+        }
+        @media (min-width: 1024px) {
+            .review-card { min-width: 32%; } /* 3 كروت في الديسك توب */
+        }
+        
+        .stars { color: var(--accent); margin-bottom: 10px; font-size: 1.2rem; }
+        .review-text { font-size: 0.95rem; color: var(--text-sec); line-height: 1.6; margin-bottom: 15px; }
+        .client-name { font-weight: bold; color: var(--accent); font-size: 0.9rem; }
+
+        /* أسهم السلايدر */
+        .slider-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--bg-card); border: 1px solid var(--accent); color: var(--accent);
+            width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+            z-index: 10; transition: 0.3s;
+        }
+        .slider-btn:hover { background: var(--accent); color: #000; }
+        .prev-btn { right: 0; }
+        .next-btn { left: 0; }
+
+        /* --- الأسئلة الشائعة --- */
+        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .faq-item { background: var(--bg-card); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+        .faq-question { width: 100%; padding: 20px; text-align: right; background: none; border: none; color: var(--text-main); font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: rgba(255,255,255,0.02); color: var(--text-sec); padding: 0 20px; }
+        .faq-item.active .faq-answer { max-height: 200px; padding-bottom: 15px; padding-top: 15px; }
+
+        /* --- مبدل الثيمات (Theme Switcher) --- */
+        .theme-container { position: fixed; top: 100px; left: 20px; z-index: 1000; }
+        .theme-btn-main {
+            width: 50px; height: 50px; background: var(--accent); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s;
+            font-size: 1.5rem;
+        }
+        .theme-btn-main:hover { transform: rotate(45deg); }
+        
+        .theme-options {
+            position: absolute; top: 60px; left: 0;
+            display: flex; flex-direction: column; gap: 10px;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .theme-container:hover .theme-options { opacity: 1; visibility: visible; }
+        
+        .theme-option {
+            width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff;
+            cursor: pointer; transition: 0.3s;
+        }
+        .theme-option:hover { transform: scale(1.2); }
+        .t-dark { background: #000; }
+        .t-light { background: #eee; }
+        .t-navy { background: #0a192f; }
+
+        /* --- الفوتر والتواصل --- */
+        .contact-section { text-align: center; margin-top: 80px; padding: 50px 20px; }
+        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; margin-top: 20px; }
+        .contact-btn:hover { background: var(--accent); color: #000; }
+        footer { text-align: center; padding: 30px; border-top: 1px solid var(--border-color); color: var(--text-sec); font-size: 0.9rem; margin-top: 20px; }
+
+        /* --- زر الواتساب العائم --- */
+        .float-wa { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; }
+        .float-wa:hover { transform: scale(1.1); }
+        .float-wa svg { width: 35px; height: 35px; fill: white; }
 
         /* --- المودال --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
-        .modal-content { background-color: #1a1a1a; border: 1px solid var(--gold-main); border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; text-align: right; position: relative; animation: modalOpen 0.4s ease; }
+        .modal-content { background-color: var(--bg-card); border: 1px solid var(--accent); border-radius: 15px; padding: 30px; width: 90%; max-width: 500px; text-align: right; position: relative; animation: modalOpen 0.4s ease; color: var(--text-main); }
         @keyframes modalOpen { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-        .close-btn { position: absolute; top: 15px; left: 20px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
-        .modal-title { color: var(--gold-main); font-size: 1.5rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .modal-body p { margin-bottom: 10px; line-height: 1.6; color: #ddd; }
-        .modal-features { list-style: none; margin: 15px 0; }
-        .modal-features li { margin-bottom: 8px; color: #fff; }
-        .modal-features li::before { content: "✔"; color: var(--gold-main); margin-left: 8px; }
+        .close-btn { position: absolute; top: 15px; left: 20px; color: var(--text-sec); font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-title { color: var(--accent); font-size: 1.5rem; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .modal-features li { color: var(--text-main); margin-bottom: 8px; }
 
-        /* --- باقي الأقسام --- */
-        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 0 5%; max-width: 1200px; margin: 0 auto; }
-        .review-card { background: #0f0f0f; border: 1px solid #222; border-radius: 10px; padding: 20px; text-align: right; }
-        .stars { color: var(--gold-main); margin-bottom: 10px; }
-        .review-text { font-size: 0.95rem; color: #ddd; line-height: 1.6; margin-bottom: 15px; }
-        .client-name { font-weight: bold; color: var(--gold-main); font-size: 0.9rem; }
-
-        .faq-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-        .faq-item { background: #0f0f0f; border-bottom: 1px solid #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
-        .faq-question { width: 100%; padding: 20px; text-align: right; background: none; border: none; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Cairo', sans-serif; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: #111; color: #aaa; padding: 0 20px; }
-        .faq-item.active .faq-answer { max-height: 200px; padding-bottom: 15px; padding-top: 15px; }
-
-        .contact-section { text-align: center; margin-top: 80px; padding: 50px 20px; background: linear-gradient(to top, #0a0a0a, transparent); }
-        .contact-btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 30px; border: 1px solid var(--gold-main); color: var(--gold-main); text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; margin-top: 20px; }
-        .contact-btn:hover { background: var(--gold-main); color: #000; }
-        
-        footer { text-align: center; padding: 30px; border-top: 1px solid rgba(255,255,255,0.05); color: #555; font-size: 0.9rem; margin-top: 20px; }
-
-        .float-wa { position: fixed; bottom: 25px; right: 25px; background-color: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; transition: 0.3s; }
-        .float-wa:hover { transform: scale(1.1); box-shadow: 0 0 15px #25d366; }
-        .float-wa svg { width: 35px; height: 35px; fill: white; }
+        /* Animation classes */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
     </style>
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="loader-logo">Zimu</div>
+    <div id="preloader"><div class="loader-logo">Zimu</div></div>
+
+    <nav class="navbar">
+        <div class="nav-logo">Zimu</div>
+        <ul class="nav-links">
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#products">المنتجات</a></li>
+            <li><a href="#reviews">آراء العملاء</a></li>
+            <li><a href="#faq">الأسئلة</a></li>
+            <li><a href="#contact">تواصل معنا</a></li>
+        </ul>
+    </nav>
+
+    <div class="theme-container">
+        <div class="theme-btn-main" title="تغيير المظهر">🎨</div>
+        <div class="theme-options">
+            <div class="theme-option t-dark" onclick="setTheme('dark')" title="داكن"></div>
+            <div class="theme-option t-light" onclick="setTheme('light')" title="فاتح"></div>
+            <div class="theme-option t-navy" onclick="setTheme('navy')" title="أزرق"></div>
+        </div>
     </div>
 
-    <header>
-        <div class="logo">Zimu</div>
+    <header id="home">
+        <div class="logo-big">Zimu</div>
         <div class="header-line"></div>
     </header>
 
     <section class="hero reveal">
-        <h1>مفتاحك لعالم <span style="color:var(--gold-main)">الاحتراف</span></h1>
+        <h1>مفتاحك لعالم <span style="color:var(--accent)">الاحتراف</span></h1>
         <p>اشتراكات رسمية لأقوى أدوات الذكاء الاصطناعي والتصميم، بأسعار لا تقبل المنافسة.</p>
     </section>
 
-    <section class="products-grid reveal">
-        <div class="card">
-            <div class="badge">الأكثر مبيعاً 🔥</div>
-            <h2 class="product-name">Canva Pro</h2>
-            <p class="product-desc">اشتراك رسمي على إيميلك الشخصي مع كافة المزايا.</p>
-            <span class="price">100 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('canva')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20كانفا%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+    <section id="products" class="reveal">
+        <h2 class="section-title">باقاتنا المميزة</h2>
+        <div class="products-grid">
+            <div class="card">
+                <div class="badge">الأكثر مبيعاً 🔥</div>
+                <h2 class="product-name">Canva Pro</h2>
+                <p class="product-desc">اشتراك رسمي على إيميلك الشخصي.</p>
+                <span class="price">100 EGP</span>
+                <div class="buttons-container">
+                    <button class="btn btn-details" onclick="openModal('canva')">تفاصيل</button>
+                    <a href="https://wa.me/201022625243?text=اشتراك%20كانفا%20برو" class="btn btn-buy" target="_blank">شراء 💬</a>
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="product-name">Gemini Pro</h2>
+                <p class="product-desc">استمتع بـ Nano Banana , Gemini 3</p>
+                <span class="price">200 EGP</span>
+                <div class="buttons-container">
+                    <button class="btn btn-details" onclick="openModal('gemini')">تفاصيل</button>
+                    <a href="https://wa.me/201022625243?text=اشتراك%20جيمناي%20برو" class="btn btn-buy" target="_blank">شراء 💬</a>
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="product-name">Perplexity Pro</h2>
+                <p class="product-desc">يدعم GPT-5.1 و Grok 4</p>
+                <span class="price">150 EGP</span>
+                <div class="buttons-container">
+                    <button class="btn btn-details" onclick="openModal('perplexity')">تفاصيل</button>
+                    <a href="https://wa.me/201022625243?text=اشتراك%20بيربليكستي%20برو" class="btn btn-buy" target="_blank">شراء 💬</a>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="card">
-            <h2 class="product-name">Gemini Pro</h2>
-            <p class="product-desc">استمتع بـ Nano Banana , Gemini 3</p>
-            <span class="price">200 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('gemini')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20جيمناي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+    <section id="reviews" class="reveal">
+        <h2 class="section-title">آراء العملاء</h2>
+        <div class="slider-wrapper">
+            <button class="slider-btn prev-btn" onclick="slideScroll('right')">»</button>
+            <button class="slider-btn next-btn" onclick="slideScroll('left')">«</button>
+            
+            <div class="slider-container" id="sliderContainer">
+                <div class="slider-track">
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text">"سرعة خيالية في التسليم، الحساب شغال تمام. شكراً زيمو."</p>
+                        <span class="client-name">- أحمد محمد</span>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text">"أحسن سعر لاشتراك جيمناي، والدعم الفني محترم جداً."</p>
+                        <span class="client-name">- سارة علي</span>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text">"تجربة ممتازة ومنصة موثوقة. أنصح الجميع بالتعامل معهم."</p>
+                        <span class="client-name">- محمود حسن</span>
+                    </div>
+                     <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text">"خدمة ما بعد البيع فوق الممتازة، شكراً ليكم."</p>
+                        <span class="client-name">- عمر خالد</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="card">
-            <h2 class="product-name">Perplexity Pro</h2>
-            <p class="product-desc">محرك البحث الذكي الذي يدعم GPT-5.1 , Grok 4</p>
-            <span class="price">150 EGP</span>
-            <div class="buttons-container">
-                <button class="btn btn-details" onclick="openModal('perplexity')">مزيد من التفاصيل</button>
-                <a href="https://wa.me/201022625243?text=اشتراك%20بيربليكستي%20برو" class="btn btn-buy" target="_blank">شراء واتساب 💬</a>
+    <section id="faq" class="reveal">
+        <h2 class="section-title">الأسئلة الشائعة</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">كيف أضمن حقي؟ <span>▼</span></button>
+                <div class="faq-answer"><p>نضمن لك تفعيل الحساب فوراً قبل الدفع في بعض الحالات، ولدينا مئات العملاء الراضين.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">هل الاشتراك رسمي؟ <span>▼</span></button>
+                <div class="faq-answer"><p>نعم، جميع الاشتراكات رسمية (Premium) وتتم دعوتك عبر بريدك الإلكتروني.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">ما هي طرق الدفع؟ <span>▼</span></button>
+                <div class="faq-answer"><p>نقبل الدفع عبر فودافون كاش، إنستاباى، والمحافظ الإلكترونية.</p></div>
             </div>
         </div>
     </section>
 
-    <h2 class="section-title reveal">ماذا يقول عملاؤنا؟</h2>
-    <section class="reviews-grid reveal">
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"سرعة خيالية في التسليم، الحساب شغال تمام بقاله شهرين بدون أي مشاكل. شكراً زيمو."</p>
-            <span class="client-name">- أحمد محمد</span>
-        </div>
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"أحسن سعر لقيته لاشتراك جيمناي، والدعم الفني محترم جداً بيرد في ثواني."</p>
-            <span class="client-name">- سارة علي</span>
-        </div>
-        <div class="review-card">
-            <div class="stars">★★★★★</div>
-            <p class="review-text">"كنت خايف في الأول بس التجربة أثبتت المصداقية. منصة محترمة وأنصح بيها."</p>
-            <span class="client-name">- محمود حسن</span>
-        </div>
+    <section id="contact" class="contact-section reveal">
+        <h2 style="color:var(--text-main);">لديك استفسار آخر؟</h2>
+        <a href="https://wa.me/201022625243" target="_blank" class="contact-btn">تواصل معنا عبر واتساب</a>
     </section>
 
-    <h2 class="section-title reveal">الأسئلة الشائعة</h2>
-    <section class="faq-container reveal">
-        <div class="faq-item">
-            <button class="faq-question">كيف أضمن حقي؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نحن نضمن لك تفعيل الحساب فوراً قبل الدفع في بعض الحالات، ولدينا مئات العملاء الراضين.</p></div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question">هل الاشتراك رسمي؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نعم، جميع الاشتراكات رسمية (Premium) وتتم دعوتك عبر بريدك الإلكتروني الشخصي.</p></div>
-        </div>
-        <div class="faq-item">
-            <button class="faq-question">ما هي طرق الدفع؟ <span class="faq-icon">▼</span></button>
-            <div class="faq-answer"><p>نقبل الدفع عبر فودافون كاش، إنستاباى (InstaPay)، والمحافظ الإلكترونية.</p></div>
-        </div>
-    </section>
-
-    <section class="contact-section reveal">
-        <h2 style="color:white; margin-bottom:10px;">لديك استفسار آخر؟</h2>
-        <p style="color:#888;">فريق الدعم جاهز للرد عليك طوال اليوم</p>
-        <a href="https://wa.me/201022625243" target="_blank" class="contact-btn">
-            تواصل معنا عبر واتساب
-        </a>
-    </section>
-
-    <footer>
-        <p>© 2025 Zimu Digital. جميع الحقوق محفوظة.</p>
-    </footer>
+    <footer><p>© 2025 Zimu Digital. جميع الحقوق محفوظة.</p></footer>
 
     <div id="productModal" class="modal">
         <div class="modal-content">
@@ -250,65 +360,10 @@
     </div>
 
     <a href="https://wa.me/201022625243" class="float-wa" target="_blank">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+        <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
     </a>
 
     <script>
-        // --- 1. إخفاء شاشة التحميل بعد وقت قصير ---
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('preloader').classList.add('fade-out');
-                document.body.classList.add('loaded'); // إعادة تفعيل السكرول
-            }, 1500); // ينتظر 1.5 ثانية
-        });
-
-        // --- 2. داتا التفاصيل ---
-        const productsData = {
-            canva: {
-                title: "تفاصيل Canva Pro",
-                content: `<p>احصل على القوة الكاملة للتصميم مع النسخة الاحترافية.</p><ul class="modal-features"><li>وصول لـ 100 مليون صورة وفيديو وعنصر بريميوم.</li><li>إزالة الخلفية بضغطة زر (Background Remover).</li><li>تغيير مقاسات التصميم سحرياً (Magic Resize).</li><li>إضافة الخطوط الخاصة بك والبراند كيت.</li><li>تفعيل رسمي على إيميلك الشخصي.</li></ul>`
-            },
-            gemini: {
-                title: "تفاصيل Gemini Pro",
-                content: `<p>أذكى نموذج ذكاء اصطناعي من Google، الآن بين يديك.</p><ul class="modal-features"><li>يدعم Nano Banana و Gemini 3 الأحدث.</li><li>نافذة سياق ضخمة (Context Window) لتحليل الملفات الكبيرة.</li><li>قدرات برمجية فائقة وتحليل الصور والفيديو.</li><li>تكامل كامل مع خدمات جوجل (Docs, Drive).</li></ul>`
-            },
-            perplexity: {
-                title: "تفاصيل Perplexity Pro",
-                content: `<p>ابحث بذكاء واحصل على إجابات دقيقة وموثقة بالمصادر.</p><ul class="modal-features"><li>يدعم أحدث الموديلات: GPT-5.1 و Grok 4.</li><li>بحث مباشر في الوقت الفعلي (Real-time Search).</li><li>رفع ملفات وتحليلها بدقة.</li><li>تجربة خالية من الإعلانات تماماً.</li></ul>`
-            }
-        };
-
-        // وظائف المودال
-        function openModal(productId) {
-            const modal = document.getElementById('productModal');
-            document.getElementById('modalTitle').innerText = productsData[productId].title;
-            document.getElementById('modalBody').innerHTML = productsData[productId].content;
-            modal.style.display = "flex";
-        }
-        function closeModal() { document.getElementById('productModal').style.display = "none"; }
-        window.onclick = function(event) { if (event.target == document.getElementById('productModal')) closeModal(); }
-
-        // أنيميشن السكرول
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                if (reveals[i].getBoundingClientRect().top < window.innerHeight - 150) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
-
-        // الأسئلة الشائعة
-        var acc = document.getElementsByClassName("faq-question");
-        for (var i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function() {
-                this.parentElement.classList.toggle("active");
-            });
-        }
-    </script>
-
-</body>
-                    </html>
-                
+        // إخفاء الـ Preloader
+        window.onload = function() {
+            setTimeout(() =>
